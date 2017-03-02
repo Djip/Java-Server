@@ -1,23 +1,23 @@
 package states;
 
-import interfaces.ThreadStates;
+import interfaces.ThreadState;
 
 /**
  * Created by jespe on 01-03-2017.
  */
-public class ThreadInit implements ThreadStates {
+public class ThreadInit implements ThreadState {
     @Override
-    public void InitializeClientObject() {
+    public void initializeClientObject() {
 
     }
 
     @Override
-    public void Communicating() {
+    public void communicating() {
 
     }
 
     @Override
-    public void ClearnUp() {
+    public void cleanUp() {
 
     }
 }

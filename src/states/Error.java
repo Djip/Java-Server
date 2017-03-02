@@ -1,23 +1,23 @@
 package states;
 
-import interfaces.ASStates;
+import interfaces.ASState;
 
 /**
  * Created by jespe on 01-03-2017.
  */
-public class Error implements ASStates {
+public class Error implements ASState {
     @Override
-    public void InitializeSocket() {
+    public void initializeSocket() {
 
     }
 
     @Override
-    public void Listening() {
+    public void listening() {
 
     }
 
     @Override
-    public void Reboot() {
+    public void reboot() {
 
     }
 }
