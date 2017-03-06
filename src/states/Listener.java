@@ -2,6 +2,7 @@ package states;
 
 import interfaces.ASState;
 import main.ArduinoServer;
+import main.Client;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -25,11 +26,16 @@ public class Listener implements ASState {
                 System.out.println("The Server is waiting for a client on port 1000");
                 //Accepts the connection for the client socket
                 ServerSocket serverSocket = ArduinoServer.getInstance().getServerSocket();
+                //waits for a client
                 Socket socket = serverSocket.accept();
+
+                Client client = new Client(socket);
+                client.run();
 
                 System.out.println("Client connected");
 
-                InputStreamReader ir = new InputStreamReader(socket.getInputStream());
+
+                /*InputStreamReader ir = new InputStreamReader(socket.getInputStream());
                 BufferedReader br = new BufferedReader(ir);
                 String message = br.readLine();
                 //Confirms that the message was received
@@ -44,7 +50,7 @@ public class Listener implements ASState {
                 }
 
                 if (message.equals("bye"))
-                    break;    // breaking the while loop.
+                    break;    // breaking the while loop.*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
