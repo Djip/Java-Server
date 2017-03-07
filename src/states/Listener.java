@@ -33,7 +33,7 @@ public class Listener implements ASState {
                 client.run();
 
                 System.out.println("New client connected");
-
+               
 
                 /*InputStreamReader ir = new InputStreamReader(socket.getInputStream());
                 BufferedReader br = new BufferedReader(ir);
@@ -61,4 +61,6 @@ public class Listener implements ASState {
     public void reboot() {
 
     }
+
+
 }

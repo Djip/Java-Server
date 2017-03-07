@@ -16,6 +16,16 @@ public class ArduinoMethod {
         return name;
     }
 
+    public ArduinoMethod(String name, int defaultValue, int minValue, int maxValue, int currentValue, String unitName, String unitCount) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+        this.currentValue = currentValue;
+        this.unitName = unitName;
+        this.unitCount = unitCount;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
