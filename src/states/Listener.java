@@ -29,10 +29,12 @@ public class Listener implements ASState {
                 //waits for a client
                 Socket socket = serverSocket.accept();
 
+                //TODO throw new conns into a hashmap
                 Client client = new Client(socket);
                 client.run();
 
                 System.out.println("New client connected");
+
                
 
                 /*InputStreamReader ir = new InputStreamReader(socket.getInputStream());
