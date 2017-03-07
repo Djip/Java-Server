@@ -11,7 +11,17 @@ import java.net.Socket;
  * Created by jespe on 01-03-2017.
  */
 public class ThreadInit implements ThreadState {
-    protected Client client;
+    private Client client;
+
+    /**
+     *@author Martin
+     * @return none
+     * @params none
+     */
+    public ThreadInit (Client client)
+    {
+        this.client = client;
+    }
 
     /**
      *@author Martin
@@ -20,9 +30,20 @@ public class ThreadInit implements ThreadState {
      */
     @Override
     public void initializeClientObject() {
-        //TODO read code here!
-        //read only from client
-        //get arduino methods here?
+        //TODO method read code here?
+        try
+        {
+            InputStreamReader ir = new InputStreamReader(client.getSocket().getInputStream());
+            BufferedReader br = new BufferedReader(ir);
+            String message = br.readLine();
+            //Confirms that the message was received
+            System.out.println(message);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+
         System.out.println("Init is complete");
         client.setThreadState(client.getComm());
     }

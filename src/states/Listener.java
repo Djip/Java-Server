@@ -32,7 +32,7 @@ public class Listener implements ASState {
                 Client client = new Client(socket);
                 client.run();
 
-                System.out.println("Client connected");
+                System.out.println("New client connected");
 
 
                 /*InputStreamReader ir = new InputStreamReader(socket.getInputStream());

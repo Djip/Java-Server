@@ -35,11 +35,9 @@ public class Client implements Runnable {
      */
     public Client()
     {
-        init = new ThreadInit();
+        init = new ThreadInit(this);
         comm = new Communication();
         noCon = new NoConnection();
-
-        threadState = getInit();
     }
 
     /**
@@ -49,15 +47,14 @@ public class Client implements Runnable {
      */
     public Client(Socket socket)
     {
+        this(); //runs the default constructor
         this.socket = socket;
-
-
     }
 
     @Override
     public void run()
     {
-
+        threadState = getInit();
     }
 
     /**
