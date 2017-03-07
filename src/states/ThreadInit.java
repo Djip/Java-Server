@@ -59,6 +59,7 @@ public class ThreadInit implements ThreadState {
 
             //Set the Arduino name
             arduino.setName(parts[0]);
+
             //This method takes an array and converts it to a List object.
             List<String> methods = new ArrayList<String>(Arrays.asList(parts));
 
