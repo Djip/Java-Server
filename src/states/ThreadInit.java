@@ -9,6 +9,7 @@ import models.ArduinoMethod;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.*;
 
 /**
@@ -41,19 +42,35 @@ public class ThreadInit implements ThreadState {
     @Override
     public void initializeClientObject() {
 
-
-
         //TODO method read code here?
         try
         {
             InputStreamReader ir = new InputStreamReader(client.getSocket().getInputStream());
             BufferedReader br = new BufferedReader(ir);
-            String message = br.readLine();
-            //Confirms that the message was received
-            System.out.println(message);
+            String message = "";
 
-            // Deserializing the string from Arduino
-            deSerialize(message);
+            try {
+
+                while ((message = br.readLine()) != null) {
+
+                    br.readLine();
+                    //Confirms that the message was received
+                    System.out.println(message);
+
+                    // Deserializing the string from Arduino
+                    deSerialize(message);
+                    break;
+                }
+
+            } catch (SocketTimeoutException ee) {
+
+                System.err.println("Timeout");
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+            }
 
         }
         catch (Exception e)
@@ -131,7 +148,7 @@ public class ThreadInit implements ThreadState {
         //arduoinoClient.put(arduino.getIp(), arduino);
         // Get instance and set clients in arduinoClient
         // ArduinoServer.getInstance().setClients(arduoinoClient);
-        ArduinoServer.getInstance().addClient(arduino);
+        ArduinoServer.getInstance().addClient(client);
 
     }
 

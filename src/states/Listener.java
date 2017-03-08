@@ -5,10 +5,7 @@ import main.ArduinoServer;
 import main.Client;
 import models.Arduino;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -65,15 +62,24 @@ public class Listener implements ASState {
     }
 
     public void heartbeat() {
-        Map<String, Arduino> tmp = ArduinoServer.getInstance().getClients();
+        Map<String, Client> tmp = ArduinoServer.getInstance().getClients();
         boolean clientNotPinged = false;
 
-        for(Map.Entry<String, Arduino> entry : tmp.entrySet()) {
+        for(Map.Entry<String, Client> entry : tmp.entrySet()) {
             String key = entry.getKey();
-            Arduino value = entry.getValue();
+            Client value = entry.getValue();
+
+            try {
+                DataInputStream is = new DataInputStream(value.getSocket().getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+                tmp.remove(key);
+                clientNotPinged = true;
+                System.out.println("Client disconnected, and prepared for remove");
+            }
 
             // Trying to ping the Arduino client
-            try {
+            /*try {
                 boolean pinged = InetAddress.getByName(value.getIp()).isReachable(5000);
 
                 if(!pinged) {
@@ -83,7 +89,7 @@ public class Listener implements ASState {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
 
         }
 

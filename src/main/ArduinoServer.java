@@ -30,7 +30,7 @@ public class ArduinoServer {
 
     // Standard Variables
     private ServerSocket serverSocket;
-    private Map<String, Arduino> clients = new HashMap<>();
+    private Map<String, Client> clients = new HashMap<>();
 
     // Constructer
     private ArduinoServer() {
@@ -90,15 +90,15 @@ public class ArduinoServer {
         this.serverSocket = serverSocket;
     }
 
-    public Map<String, Arduino> getClients() {
+    public Map<String, Client> getClients() {
         return clients;
     }
 
-    public void setClients(Map<String, Arduino> clients) {
+    public void setClients(Map<String, Client> clients) {
         this.clients = clients;
     }
 
-    public void addClient(Arduino client) {
-        this.clients.put(client.getIp(), client);
+    public void addClient(Client client) {
+        this.clients.put(client.getArduino().getIp(), client);
     }
 }
