@@ -6,10 +6,7 @@ import main.Client;
 import models.Arduino;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -48,7 +45,7 @@ public class Listener implements ASState {
                         heartbeat();
                         System.out.println("Running the Heartbeat method");
                     }
-                }, 10000);
+                }, 10000, 10000);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -62,20 +59,29 @@ public class Listener implements ASState {
     }
 
     public void heartbeat() {
+        System.out.println("Hello from heartbeat24");
         Map<String, Client> tmp = ArduinoServer.getInstance().getClients();
         boolean clientNotPinged = false;
-
+System.out.println(tmp.size());
         for(Map.Entry<String, Client> entry : tmp.entrySet()) {
+            System.out.println("Hello from heartbeat37");
             String key = entry.getKey();
             Client value = entry.getValue();
-
             try {
-                DataInputStream is = new DataInputStream(value.getSocket().getInputStream());
+                DataOutputStream os = new DataOutputStream(value.getSocket().getOutputStream());
+                try {
+                    os.writeBoolean(true);
+                    System.out.println("Hello from heartbeat");
+                } catch (SocketException sockEx) {
+                    System.out.println("Catch on the fucker.....");
+                    tmp.remove(key);
+                    clientNotPinged = true;
+                    System.out.println("Client disconnected, and prepared for remove");
+                }
+
             } catch (IOException e) {
-                e.printStackTrace();
-                tmp.remove(key);
-                clientNotPinged = true;
-                System.out.println("Client disconnected, and prepared for remove");
+
+                System.out.println("Could not instantiate DataOutputStream");
             }
 
             // Trying to ping the Arduino client
