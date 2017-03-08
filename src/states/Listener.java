@@ -59,50 +59,31 @@ public class Listener implements ASState {
     }
 
     public void heartbeat() {
-        System.out.println("Hello from heartbeat24");
-        Map<String, Client> tmp = ArduinoServer.getInstance().getClients();
-        boolean clientNotPinged = false;
-System.out.println(tmp.size());
-        for(Map.Entry<String, Client> entry : tmp.entrySet()) {
-            System.out.println("Hello from heartbeat37");
+
+        for(Map.Entry<String, Client> entry : ArduinoServer.getInstance().getClients().entrySet()) {
             String key = entry.getKey();
             Client value = entry.getValue();
             try {
+                // Creating output stream so we can test connection.
                 DataOutputStream os = new DataOutputStream(value.getSocket().getOutputStream());
                 try {
+
+                    // Trying to write to the socket, if that failes. then we dont have connection anymore
+                    // and we will catch exeption and remove the client from our client HashMap.
                     os.writeBoolean(true);
-                    System.out.println("Hello from heartbeat");
+                    System.out.println("Trying to write on the socket..");
+
                 } catch (SocketException sockEx) {
-                    System.out.println("Catch on the fucker.....");
-                    tmp.remove(key);
-                    clientNotPinged = true;
-                    System.out.println("Client disconnected, and prepared for remove");
+
+                    // Remove the client from the Hashmap clients
+                    ArduinoServer.getInstance().getClients().remove(key);
+                    System.out.println("Client disconnected, and removed from client list");
                 }
 
             } catch (IOException e) {
 
                 System.out.println("Could not instantiate DataOutputStream");
             }
-
-            // Trying to ping the Arduino client
-            /*try {
-                boolean pinged = InetAddress.getByName(value.getIp()).isReachable(5000);
-
-                if(!pinged) {
-                    tmp.remove(key);
-                    clientNotPinged = true;
-                    System.out.println("Client disconnected, and prepared for remove");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-
-        }
-
-        if(clientNotPinged) {
-            // When removed items we set the Arduino HasMap of client.
-            ArduinoServer.getInstance().setClients(tmp);
-            System.out.println("Setting the Map to our tmp");
         }
     }
 
