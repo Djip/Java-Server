@@ -1,6 +1,7 @@
 package main;
 
 import interfaces.ThreadState;
+import models.Arduino;
 import states.Communication;
 import states.NoConnection;
 import states.ThreadInit;
@@ -19,6 +20,9 @@ public class Client implements Runnable {
      */
     //current state
     private ThreadState threadState;
+
+    //Variables
+    private Arduino arduino;
 
     //our other states
     private ThreadState init;
@@ -49,6 +53,7 @@ public class Client implements Runnable {
     {
         this(); //runs the default constructor
         this.socket = socket;
+
     }
 
     @Override
@@ -87,4 +92,11 @@ public class Client implements Runnable {
         return socket;
     }
 
+    public Arduino getArduino() {
+        return arduino;
+    }
+
+    public void setArduino(Arduino arduino) {
+        this.arduino = arduino;
+    }
 }

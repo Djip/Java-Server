@@ -34,7 +34,25 @@ public class Listener implements ASState {
                 client.run();
 
                 System.out.println("New client connected");
-                
+
+               
+
+                /*InputStreamReader ir = new InputStreamReader(socket.getInputStream());
+                BufferedReader br = new BufferedReader(ir);
+                String message = br.readLine();
+                //Confirms that the message was received
+                System.out.println(message);
+
+                if (message.equals("HELLO")) {
+                    PrintStream ps = new PrintStream(socket.getOutputStream());
+                    ps.println("Received our hello message.");
+                } else {
+                    PrintStream ps = new PrintStream(socket.getOutputStream());
+                    ps.println("Did not receive your hello message");
+                }
+
+                if (message.equals("bye"))
+                    break;    // breaking the while loop.*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -45,4 +63,6 @@ public class Listener implements ASState {
     public void reboot() {
 
     }
+
+
 }
