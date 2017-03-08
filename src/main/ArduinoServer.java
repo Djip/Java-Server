@@ -97,4 +97,8 @@ public class ArduinoServer {
     public void setClients(Map<String, Arduino> clients) {
         this.clients = clients;
     }
+
+    public void addClient(Arduino client) {
+        this.clients.put(client.getIp(), client);
+    }
 }

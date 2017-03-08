@@ -125,12 +125,13 @@ public class ThreadInit implements ThreadState {
         arduino.setIp(client.getSocket().getInetAddress().toString());
 
         // Creating new hashmap for connectet arduino client
-        Map<String, Arduino> arduoinoClient = new HashMap<>();
+        //Map<String, Arduino> arduoinoClient = new HashMap<>();
 
 
-        arduoinoClient.put(arduino.getIp(), arduino);
+        //arduoinoClient.put(arduino.getIp(), arduino);
         // Get instance and set clients in arduinoClient
-        ArduinoServer.getInstance().setClients(arduoinoClient);
+        // ArduinoServer.getInstance().setClients(arduoinoClient);
+        ArduinoServer.getInstance().addClient(arduino);
 
     }
 

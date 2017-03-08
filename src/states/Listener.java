@@ -3,12 +3,20 @@ package states;
 import interfaces.ASState;
 import main.ArduinoServer;
 import main.Client;
+import models.Arduino;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by jespe on 01-03-2017.
@@ -35,24 +43,16 @@ public class Listener implements ASState {
 
                 System.out.println("New client connected");
 
-               
+                // Creating timer that will do check on each client with Heartbeat method.
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        heartbeat();
+                        System.out.println("Running the Heartbeat method");
+                    }
+                }, 10000);
 
-                /*InputStreamReader ir = new InputStreamReader(socket.getInputStream());
-                BufferedReader br = new BufferedReader(ir);
-                String message = br.readLine();
-                //Confirms that the message was received
-                System.out.println(message);
-
-                if (message.equals("HELLO")) {
-                    PrintStream ps = new PrintStream(socket.getOutputStream());
-                    ps.println("Received our hello message.");
-                } else {
-                    PrintStream ps = new PrintStream(socket.getOutputStream());
-                    ps.println("Did not receive your hello message");
-                }
-
-                if (message.equals("bye"))
-                    break;    // breaking the while loop.*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -64,5 +64,34 @@ public class Listener implements ASState {
 
     }
 
+    public void heartbeat() {
+        Map<String, Arduino> tmp = ArduinoServer.getInstance().getClients();
+        boolean clientNotPinged = false;
+
+        for(Map.Entry<String, Arduino> entry : tmp.entrySet()) {
+            String key = entry.getKey();
+            Arduino value = entry.getValue();
+
+            // Trying to ping the Arduino client
+            try {
+                boolean pinged = InetAddress.getByName(value.getIp()).isReachable(5000);
+
+                if(!pinged) {
+                    tmp.remove(key);
+                    clientNotPinged = true;
+                    System.out.println("Client disconnected, and prepared for remove");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        if(clientNotPinged) {
+            // When removed items we set the Arduino HasMap of client.
+            ArduinoServer.getInstance().setClients(tmp);
+            System.out.println("Setting the Map to our tmp");
+        }
+    }
 
 }
