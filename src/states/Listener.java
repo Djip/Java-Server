@@ -60,6 +60,8 @@ public class Listener implements ASState {
 
     public void heartbeat() {
 
+        // Looping though our clients and testing if the connection to all of then is still okay.
+        // Else se simply remove the client from the HashMap
         for(Map.Entry<String, Client> entry : ArduinoServer.getInstance().getClients().entrySet()) {
             String key = entry.getKey();
             Client value = entry.getValue();
@@ -81,7 +83,6 @@ public class Listener implements ASState {
                 }
 
             } catch (IOException e) {
-
                 System.out.println("Could not instantiate DataOutputStream");
             }
         }
