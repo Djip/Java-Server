@@ -20,3 +20,4 @@ dist/*
 
 # Removing eclipse specifik folders
 .settings/*
+.classpath
