@@ -11,3 +11,9 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Removing Intellj folders from project
+.idea/
+
+# Removing dist folder since its an lokal thing to compile and put into tomcat
+dist/
