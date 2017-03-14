@@ -29,7 +29,7 @@ description="generate the distribution">
 description="generate the distribution">
 <!-- Create the distribution directory -->
 <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-<war warfile="${dist}/ArduinoServerServlet.war" webxml="web.xml">
+<war warfile="${dist}/java-server.war" webxml="web.xml">
 <!--<fileset dir="www"/>-->
 <classes dir = "${build}"/>
 </war>

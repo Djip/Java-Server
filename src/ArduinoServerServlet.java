@@ -1,6 +1,6 @@
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
-import classes.main.ArduinoServer;
+import main.ArduinoServer;
 
 /**
  * Created by jespe on 01-03-2017.

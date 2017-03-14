@@ -1,7 +1,7 @@
 package models;
 
 /**
- * Created by jespe on 01-03-2017.
+ * Created by jesper on 01-03-2017.
  */
 public class ArduinoMethod {
     private String name;
