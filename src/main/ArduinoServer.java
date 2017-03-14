@@ -1,14 +1,12 @@
 package main;
 
-import interfaces.ASState;
-import models.Arduino;
-import states.Error;
-import states.Init;
-import states.Listener;
-
 import java.net.ServerSocket;
 import java.util.HashMap;
 import java.util.Map;
+
+import interfaces.ASState;
+import states.Init;
+import states.Listener;
 
 /**
  * Created by jespe on 01-03-2017.
@@ -16,7 +14,7 @@ import java.util.Map;
 
 public class ArduinoServer {
     // Constants
-    public static final int portNumber = 1000;
+    public static final int portNumber = 9000;
 
     // Instance
     public static ArduinoServer instance;
@@ -36,7 +34,7 @@ public class ArduinoServer {
     private ArduinoServer() {
         init = new Init();
         listener = new Listener();
-        error = new Error();
+        //error = new Error();
 
         asState = getInit();
     }

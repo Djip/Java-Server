@@ -3,11 +3,8 @@ package states;
 import interfaces.ASState;
 import main.ArduinoServer;
 import main.Client;
-import models.Arduino;
-
 import java.io.*;
 import java.net.*;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,6 +13,9 @@ import java.util.TimerTask;
  * Created by jespe on 01-03-2017.
  */
 public class Listener implements ASState {
+    DataInputStream readFromClient;
+    DataOutputStream writeToClient;
+    
     @Override
     public void initializeSocket() {
         System.out.println("The socket is already initialized");
@@ -34,7 +34,7 @@ public class Listener implements ASState {
                 //TODO throw new conns into a hashmap
                 Client client = new Client(socket);
                 client.run();
-
+                                
                 System.out.println("New client connected");
 
                 // Creating timer that will do check on each client with Heartbeat method.

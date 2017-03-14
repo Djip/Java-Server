@@ -9,6 +9,7 @@ import models.ArduinoMethod;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.Socket;
+
 import java.net.SocketTimeoutException;
 import java.util.*;
 
@@ -49,18 +50,17 @@ public class ThreadInit implements ThreadState {
             InputStreamReader ir = new InputStreamReader(client.getSocket().getInputStream());
             BufferedReader br = new BufferedReader(ir);
             String message = "";
-
+            
             try {
 
-                while ((message = br.readLine()) != null) {
+                while (br.ready()) {
+                    message = br.readLine();
 
-//                    String message = br.readLine();
-                    //Confirms that the message was received
-                    System.out.println(message);
+                    client.getSocket();
 
                     // Deserializing the string from Arduino
                     deSerialize(message);
-                    // break;
+
                  }
 
             } catch (SocketTimeoutException ee) {
@@ -72,7 +72,7 @@ public class ThreadInit implements ThreadState {
                 e.printStackTrace();
 
             }
-
+            
         }
         catch (Exception e)
         {
