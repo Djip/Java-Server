@@ -8,7 +8,7 @@ import models.ArduinoMethod;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.*;
 
 /**
@@ -41,20 +41,37 @@ public class ThreadInit implements ThreadState {
     @Override
     public void initializeClientObject() {
 
-
-
         //TODO method read code here?
         try
         {
+            System.out.println("Yo whats up!");
             InputStreamReader ir = new InputStreamReader(client.getSocket().getInputStream());
             BufferedReader br = new BufferedReader(ir);
-            String message = br.readLine();
-            //Confirms that the message was received
-            System.out.println(message);
+            String message = "";
+            
+            try {
 
-            // Deserializing the string from Arduino
-            deSerialize(message);
+                while (br.ready()) {
+                	System.out.println("Before read");
+                    message = br.readLine();
+                    //Confirms that the message was received
+                    System.out.println(message + "HEY WE Are trying to print message");
+                    client.getSocket();
+                    // Deserializing the string from Arduino
+                    deSerialize(message);
+                    // break;
+                 }
 
+            } catch (SocketTimeoutException ee) {
+
+                System.err.println("Timeout");
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+            }
+            
         }
         catch (Exception e)
         {
@@ -76,8 +93,9 @@ public class ThreadInit implements ThreadState {
         System.out.println("Can't talk until init is complete");
     }
 
-    private void deSerialize(String message)
+    public void deSerialize(String message)
     {
+        System.out.println("OK");
         Arduino arduino = new Arduino();
 
         // Split message by "#"
@@ -100,7 +118,7 @@ public class ThreadInit implements ThreadState {
         for (String methodString : methods)
         {
             //Split var by ","
-            String [] var = methodString.split(",");
+            String [] var = methodString.split(",", -1);
 
             //checking currentState are null or empty
             if(var[5] != null || var[5] != "")
@@ -125,12 +143,14 @@ public class ThreadInit implements ThreadState {
         arduino.setIp(client.getSocket().getInetAddress().toString());
 
         // Creating new hashmap for connectet arduino client
-        Map<String, Arduino> arduoinoClient = new HashMap<>();
+        //Map<String, Arduino> arduoinoClient = new HashMap<>();
 
+        // Adding the arduino to the client.
+        client.setArduino(arduino);
 
-        arduoinoClient.put(arduino.getIp(), arduino);
         // Get instance and set clients in arduinoClient
-        ArduinoServer.getInstance().setClients(arduoinoClient);
+        // ArduinoServer.getInstance().setClients(arduoinoClient);
+        ArduinoServer.getInstance().addClient(client);
 
     }
 
