@@ -36,15 +36,7 @@ public class Listener implements ASState {
                 client.run();
                                 
                 System.out.println("New client connected");
-                
-                readFromClient = new DataInputStream(socket.getInputStream());
-                writeToClient = new DataOutputStream(socket.getOutputStream());
 
-            // Get methode from client
-                String metoder = readFromClient.readUTF();
-                System.out.println(metoder);
-                writeToClient.writeUTF("\nmetoden blev modtaget ");
-                
                 // Creating timer that will do check on each client with Heartbeat method.
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
