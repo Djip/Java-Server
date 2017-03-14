@@ -3,12 +3,14 @@ package states;
 import interfaces.ASState;
 import main.ArduinoServer;
 import main.Client;
+import models.Arduino;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by jespe on 01-03-2017.
@@ -35,24 +37,16 @@ public class Listener implements ASState {
 
                 System.out.println("New client connected");
 
-               
+                // Creating timer that will do check on each client with Heartbeat method.
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        heartbeat();
+                        System.out.println("Running the Heartbeat method");
+                    }
+                }, 10000, 10000);
 
-                /*InputStreamReader ir = new InputStreamReader(socket.getInputStream());
-                BufferedReader br = new BufferedReader(ir);
-                String message = br.readLine();
-                //Confirms that the message was received
-                System.out.println(message);
-
-                if (message.equals("HELLO")) {
-                    PrintStream ps = new PrintStream(socket.getOutputStream());
-                    ps.println("Received our hello message.");
-                } else {
-                    PrintStream ps = new PrintStream(socket.getOutputStream());
-                    ps.println("Did not receive your hello message");
-                }
-
-                if (message.equals("bye"))
-                    break;    // breaking the while loop.*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -64,5 +58,34 @@ public class Listener implements ASState {
 
     }
 
+    public void heartbeat() {
+
+        // Looping though our clients and testing if the connection to all of then is still okay.
+        // Else se simply remove the client from the HashMap
+        for(Map.Entry<String, Client> entry : ArduinoServer.getInstance().getClients().entrySet()) {
+            String key = entry.getKey();
+            Client value = entry.getValue();
+            try {
+                // Creating output stream so we can test connection.
+                DataOutputStream os = new DataOutputStream(value.getSocket().getOutputStream());
+                try {
+
+                    // Trying to write to the socket, if that failes. then we dont have connection anymore
+                    // and we will catch exeption and remove the client from our client HashMap.
+                    os.writeBoolean(true);
+                    System.out.println("Trying to write on the socket..");
+
+                } catch (SocketException sockEx) {
+
+                    // Remove the client from the Hashmap clients
+                    ArduinoServer.getInstance().getClients().remove(key);
+                    System.out.println("Client disconnected, and removed from client list");
+                }
+
+            } catch (IOException e) {
+                System.out.println("Could not instantiate DataOutputStream");
+            }
+        }
+    }
 
 }
