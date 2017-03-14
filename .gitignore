@@ -13,7 +13,7 @@
 hs_err_pid*
 
 # Removing Intellj folders from project
-.idea/
+.idea/*
 
 # Removing dist folder since its an lokal thing to compile and put into tomcat
-dist/
+dist/*
