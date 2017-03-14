@@ -17,3 +17,6 @@ hs_err_pid*
 
 # Removing dist folder since its an lokal thing to compile and put into tomcat
 dist/*
+
+# Removing eclipse specifik folders
+.settings/*
