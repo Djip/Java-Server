@@ -56,7 +56,7 @@ public class ThreadInit implements ThreadState {
                     message = br.readLine();
                     //Confirms that the message was received
                     System.out.println(message + "HEY WE Are trying to print message");
-                    client.getSocket().w
+                    client.getSocket();
                     // Deserializing the string from Arduino
                     deSerialize(message);
                     // break;

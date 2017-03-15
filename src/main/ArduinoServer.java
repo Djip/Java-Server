@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class ArduinoServer {
     // Constants
-    public static final int portNumber = 1000;
+    public static final int portNumber = 2000;
 
     // Instance
     public static ArduinoServer instance;

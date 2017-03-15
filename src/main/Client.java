@@ -59,7 +59,12 @@ public class Client implements Runnable {
     @Override
     public void run()
     {
+        System.out.println("we are in run");
         threadState = getInit();
+        threadState.initializeClientObject();
+
+
+        // test if we can send message to client
     }
 
     /**
@@ -72,10 +77,7 @@ public class Client implements Runnable {
         threadState = state;
     }
 
-    public ThreadState getInit()
-    {
-        return init;
-    }
+    public ThreadState getInit() { return init; }
 
     public ThreadState getComm()
     {

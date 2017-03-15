@@ -15,6 +15,7 @@ import java.util.*;
  * Created by jespe on 01-03-2017.
  */
 public class ThreadInit implements ThreadState {
+
     private Client client;
 
     /**
@@ -40,6 +41,7 @@ public class ThreadInit implements ThreadState {
      * */
     @Override
     public void initializeClientObject() {
+        System.out.println("we are in threadinit");
 
 
 
@@ -48,6 +50,7 @@ public class ThreadInit implements ThreadState {
         {
             InputStreamReader ir = new InputStreamReader(client.getSocket().getInputStream());
             BufferedReader br = new BufferedReader(ir);
+
             String message = br.readLine();
             //Confirms that the message was received
             System.out.println(message);

@@ -25,7 +25,7 @@ public class Listener implements ASState {
     public void listening() {
         while(true) {
             try {
-                System.out.println("The Server is waiting for a client on port 1000");
+                System.out.println("The Serverdfdagd is waiting for a client on port 1000");
                 //Accepts the connection for the client socket
                 ServerSocket serverSocket = ArduinoServer.getInstance().getServerSocket();
                 //waits for a client
@@ -40,7 +40,7 @@ public class Listener implements ASState {
                 readFromClient = new DataInputStream(socket.getInputStream());
                 writeToClient = new DataOutputStream(socket.getOutputStream());
 
-            // Get methode from client
+                // Get methode from client
                 String metoder = readFromClient.readUTF();
                 System.out.println(metoder);
                 writeToClient.writeUTF("\nmetoden blev modtaget ");
