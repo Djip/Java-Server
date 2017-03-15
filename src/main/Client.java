@@ -62,9 +62,6 @@ public class Client implements Runnable {
         System.out.println("we are in run");
         threadState = getInit();
         threadState.initializeClientObject();
-
-
-        // test if we can send message to client
     }
 
     /**
