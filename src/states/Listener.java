@@ -34,23 +34,6 @@ public class Listener implements ASState {
                 //TODO throw new conns into a hashmap
                 Client client = new Client(socket);
                 client.run();
-
-
-
-                System.out.println("New client connected");
-
-                // Creating timer that will do check on each client with Heartbeat method.
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        heartbeat();
-                        System.out.println("Running the Heartbeat method");
-                    }
-                }, 10000, 10000);
-
-                if (message.equals("bye"))
-                    break;    // breaking the while loop.*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -61,35 +44,4 @@ public class Listener implements ASState {
     public void reboot() {
 
     }
-
-    public void heartbeat() {
-
-        // Looping though our clients and testing if the connection to all of then is still okay.
-        // Else se simply remove the client from the HashMap
-        for(Map.Entry<String, Client> entry : ArduinoServer.getInstance().getClients().entrySet()) {
-            String key = entry.getKey();
-            Client value = entry.getValue();
-            try {
-                // Creating output stream so we can test connection.
-                DataOutputStream os = new DataOutputStream(value.getSocket().getOutputStream());
-                try {
-
-                    // Trying to write to the socket, if that failes. then we dont have connection anymore
-                    // and we will catch exeption and remove the client from our client HashMap.
-                    os.writeBoolean(true);
-                    System.out.println("Trying to write on the socket..");
-
-                } catch (SocketException sockEx) {
-
-                    // Remove the client from the Hashmap clients
-                    ArduinoServer.getInstance().getClients().remove(key);
-                    System.out.println("Client disconnected, and removed from client list");
-                }
-
-            } catch (IOException e) {
-                System.out.println("Could not instantiate DataOutputStream");
-            }
-        }
-    }
-
 }

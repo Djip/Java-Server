@@ -8,6 +8,7 @@ import models.ArduinoMethod;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import java.net.SocketTimeoutException;
@@ -54,15 +55,28 @@ public class ThreadInit implements ThreadState {
             String message = "";
 
             try {
-
                 while (br.ready()) {
-                    message = br.readLine();
+                    message = br.readLine().trim();
+                    if (!message.isEmpty()) {
+                        System.out.println(message);
+                        // Deserializing the string from Arduino
+                        deSerialize(message);
 
-                    client.getSocket();
+                        // Creating timer that will do check on each client with Heartbeat method.
+                        client.setHeartbeatTimer(new Timer());
+                        client.getHeartbeatTimer().schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                System.out.println("Running the Heartbeat method");
+                                client.getThreadState().heartbeat();
+                            }
+                        }, 2000, 2000);
 
-                    // Deserializing the string from Arduino
-                    deSerialize(message);
+                        System.out.println("New client connected");
 
+                        client.setThreadState(client.getComm());
+                        client.communicating();
+                    }
                  }
 
             } catch (SocketTimeoutException ee) {
@@ -80,9 +94,6 @@ public class ThreadInit implements ThreadState {
         {
             System.out.println(e);
         }
-
-        System.out.println("Init is complete");
-        client.setThreadState(client.getComm());
     }
 
     /**
@@ -154,7 +165,6 @@ public class ThreadInit implements ThreadState {
         // Get instance and set clients in arduinoClient
         // ArduinoServer.getInstance().setClients(arduoinoClient);
         ArduinoServer.getInstance().addClient(client);
-
     }
 
     /**
@@ -162,6 +172,11 @@ public class ThreadInit implements ThreadState {
      * @return none
      * @params none
      */
+    @Override
+    public void heartbeat() {
+        System.out.println("Can't heartbeat while initializing");
+    }
+
     @Override
     public void cleanUp() {
         System.out.println("Can't cleanUp until init is complete");

@@ -7,6 +7,7 @@ import states.NoConnection;
 import states.ThreadInit;
 
 import java.net.Socket;
+import java.util.Timer;
 
 /**
  * Created by jespe on 01-03-2017.
@@ -31,6 +32,7 @@ public class Client implements Runnable {
 
     private Socket socket;
 
+    private Timer heartbeatTimer;
 
     /**
      *@author Martin
@@ -40,8 +42,8 @@ public class Client implements Runnable {
     public Client()
     {
         init = new ThreadInit(this);
-        comm = new Communication();
-        noCon = new NoConnection();
+        comm = new Communication(this);
+        noCon = new NoConnection(this);
     }
 
     /**
@@ -61,7 +63,23 @@ public class Client implements Runnable {
     {
         System.out.println("we are in run");
         threadState = getInit();
+        initializeClientObject();
+    }
+
+    public void initializeClientObject() {
         threadState.initializeClientObject();
+    }
+
+    public void communicating() {
+        threadState.communicating();
+    }
+
+    public void cleanUp() {
+        threadState.cleanUp();
+    }
+
+    public ThreadState getThreadState() {
+        return threadState;
     }
 
     /**
@@ -97,5 +115,13 @@ public class Client implements Runnable {
 
     public void setArduino(Arduino arduino) {
         this.arduino = arduino;
+    }
+
+    public Timer getHeartbeatTimer() {
+        return heartbeatTimer;
+    }
+
+    public void setHeartbeatTimer(Timer heartbeatTimer) {
+        this.heartbeatTimer = heartbeatTimer;
     }
 }

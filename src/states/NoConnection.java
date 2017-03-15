@@ -1,11 +1,17 @@
 package states;
 
 import interfaces.ThreadState;
+import main.Client;
 
 /**
  * Created by jespe on 01-03-2017.
  */
 public class NoConnection implements ThreadState {
+    private Client client;
+
+    public NoConnection(Client client) {
+        this.client = client;
+    }
     @Override
     public void initializeClientObject() {
 
@@ -13,6 +19,11 @@ public class NoConnection implements ThreadState {
 
     @Override
     public void communicating() {
+
+    }
+
+    @Override
+    public void heartbeat() {
 
     }
 

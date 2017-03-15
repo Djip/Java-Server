@@ -6,5 +6,6 @@ package interfaces;
 public interface ThreadState {
     void initializeClientObject();
     void communicating();
+    void heartbeat();
     void cleanUp();
 }
