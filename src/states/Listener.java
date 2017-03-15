@@ -15,7 +15,7 @@ import java.util.TimerTask;
 public class Listener implements ASState {
     DataInputStream readFromClient;
     DataOutputStream writeToClient;
-    
+
     @Override
     public void initializeSocket() {
         System.out.println("The socket is already initialized");
@@ -34,7 +34,9 @@ public class Listener implements ASState {
                 //TODO throw new conns into a hashmap
                 Client client = new Client(socket);
                 client.run();
-                                
+
+
+
                 System.out.println("New client connected");
 
                 // Creating timer that will do check on each client with Heartbeat method.
@@ -47,6 +49,8 @@ public class Listener implements ASState {
                     }
                 }, 10000, 10000);
 
+                if (message.equals("bye"))
+                    break;    // breaking the while loop.*/
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -43,6 +43,8 @@ public class ThreadInit implements ThreadState {
     @Override
     public void initializeClientObject() {
 
+
+
         //TODO method read code here?
         try
         {
@@ -50,7 +52,7 @@ public class ThreadInit implements ThreadState {
             InputStreamReader ir = new InputStreamReader(client.getSocket().getInputStream());
             BufferedReader br = new BufferedReader(ir);
             String message = "";
-            
+
             try {
 
                 while (br.ready()) {
@@ -72,7 +74,7 @@ public class ThreadInit implements ThreadState {
                 e.printStackTrace();
 
             }
-            
+
         }
         catch (Exception e)
         {
