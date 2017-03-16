@@ -16,6 +16,8 @@ import java.util.Map;
 public class Communication implements ThreadState {
     private Client client;
 
+    DataOutputStream dataOutputStream = null;
+
     public Communication(Client client) {
         this.client = client;
     }
@@ -30,12 +32,23 @@ public class Communication implements ThreadState {
         // til client fra UWP
         System.out.println("Trying to sent a test");
         try {
-            DataOutputStream dataOutputStream = new DataOutputStream(client.getSocket().getOutputStream());
+            dataOutputStream = new DataOutputStream(client.getSocket().getOutputStream());
             dataOutputStream.writeUTF("Test");
             System.out.println("Test sent");
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Close dataOutputStream
+        try {
+            dataOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // set State: NoConnection and method: cleanUp
+        client.setThreadState(client.getNoCon());
+        client.cleanUp();
     }
 
     @Override

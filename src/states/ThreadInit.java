@@ -88,7 +88,7 @@ public class ThreadInit implements ThreadState {
                 e.printStackTrace();
 
             }
-
+            br.close();
         }
         catch (Exception e)
         {
