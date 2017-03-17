@@ -1,8 +1,11 @@
 package models;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * Created by jesper on 01-03-2017.
  */
+@XStreamAlias("ArduinoMethod")
 public class ArduinoMethod {
     private String name;
     private int defaultValue;

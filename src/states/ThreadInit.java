@@ -125,8 +125,8 @@ public class ThreadInit implements ThreadState {
         methods.remove(0);
 
         // Creating a hashmap for group and core methods
-        Map<String, ArduinoMethod> groupMethods = new HashMap<>();
-        Map<String, ArduinoMethod> coreMethods = new HashMap<>();
+        List<ArduinoMethod> groupMethods = new ArrayList<>();
+        List<ArduinoMethod> coreMethods = new ArrayList<>();
 
 
         for (String methodString : methods)
@@ -134,18 +134,18 @@ public class ThreadInit implements ThreadState {
             //Split var by ","
             String [] var = methodString.split(",", -1);
 
+            int unitCount = Integer.parseInt(var[6]);
             //checking currentState are null or empty
-            if(var[5] != null || var[5] != "")
+            if(unitCount > 0)
             {
                 //If empty or null put into groupMethods
-                groupMethods.put(var[0], new ArduinoMethod(var[0],Integer.parseInt(var[1]),Integer.parseInt(var[2]),Integer.parseInt(var[3]),Integer.parseInt(var[4]),var[5], var[6]));
-
+                groupMethods.add(new ArduinoMethod(var[0],Integer.parseInt(var[1]),Integer.parseInt(var[2]),Integer.parseInt(var[3]),Integer.parseInt(var[4]),var[5], var[6]));
 
             }
             else
             {
                 //Else put into coreMethods
-                coreMethods.put(var[0], new ArduinoMethod(var[0],Integer.parseInt(var[1]),Integer.parseInt(var[2]),Integer.parseInt(var[3]),Integer.parseInt(var[4]),var[5], var[6]));
+                coreMethods.add(new ArduinoMethod(var[0],Integer.parseInt(var[1]),Integer.parseInt(var[2]),Integer.parseInt(var[3]),Integer.parseInt(var[4]),var[5], var[6]));
             }
 
         }

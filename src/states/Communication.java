@@ -1,6 +1,9 @@
 package states;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import interfaces.ThreadState;
+import java.awt.BorderLayout;
 import main.ArduinoServer;
 import main.Client;
 
@@ -8,7 +11,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.HashMap;
 import java.util.Map;
+import jdk.nashorn.internal.runtime.Debug;
+import models.Arduino;
+import models.ArduinoMethod;
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
 
 /**
  * Created by jespe on 01-03-2017.
@@ -29,6 +37,10 @@ public class Communication implements ThreadState {
 
     @Override
     public void communicating() {
+        
+        // Testing the xml convertion
+        serializeXML();
+        
         // til client fra UWP
         System.out.println("Trying to sent a test");
         try {
@@ -83,6 +95,35 @@ public class Communication implements ThreadState {
         }
     }
 
+    public String serializeXML() {
+        String xml = "";
+        xml += "<ArduinoCollection>";
+        xml += "<Arduinos>";
+                
+        XStream xstream = new XStream(new DomDriver());
+        xstream.processAnnotations(ArduinoMethod.class); 
+        //xstream.omitField(Arduino.class, "entry");
+        xstream.alias("Arduino", Arduino.class);
+        xstream.aliasField("core", Arduino.class, "coreMethods");
+        xstream.aliasField("group", Arduino.class, "groupMethods");
+        ArduinoServer.getInstance().getClients();
+        
+        for (Map.Entry<String, Client> entry : ArduinoServer.getInstance().getClients().entrySet() ) {
+            //System.out.println("We are inside for loop");
+            
+            Arduino arduino = entry.getValue().getArduino();
+            xml += xstream.toXML(arduino);
+  
+        }
+        
+        xml += "</Arduinos>";
+        xml += "</ArduinoCollection>";
+        
+        System.out.println(xml);
+        
+        return xml;
+    }
+    
     @Override
     public void cleanUp() {
 

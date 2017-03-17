@@ -1,6 +1,10 @@
 package models;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,8 +13,12 @@ import java.util.Map;
 public class Arduino {
     private String name;
     private String ip;
-    private Map<String, ArduinoMethod> coreMethods = new HashMap<>();
-    private Map<String, ArduinoMethod> groupMethods = new HashMap<>();
+    
+    @XStreamAlias("core")
+    private List<ArduinoMethod> coreMethods = new ArrayList<>();
+    
+    @XStreamAlias("group")
+    private List<ArduinoMethod> groupMethods = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -28,19 +36,19 @@ public class Arduino {
         this.ip = ip;
     }
 
-    public Map<String, ArduinoMethod> getCoreMethods() {
+    public List<ArduinoMethod> getCoreMethods() {
         return coreMethods;
     }
 
-    public void setCoreMethods(Map<String, ArduinoMethod> coreMethods) {
+    public void setCoreMethods(List<ArduinoMethod> coreMethods) {
         this.coreMethods = coreMethods;
     }
 
-    public Map<String, ArduinoMethod> getGroupMethods() {
+    public List<ArduinoMethod> getGroupMethods() {
         return groupMethods;
     }
 
-    public void setGroupMethods(Map<String, ArduinoMethod> groupMethods) {
+    public void setGroupMethods(List<ArduinoMethod> groupMethods) {
         this.groupMethods = groupMethods;
     }
 }
