@@ -1,5 +1,7 @@
 package main;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import interfaces.ThreadState;
 import models.Arduino;
 import states.Communication;
@@ -7,7 +9,9 @@ import states.NoConnection;
 import states.ThreadInit;
 
 import java.net.Socket;
+import java.util.Map;
 import java.util.Timer;
+import models.ArduinoMethod;
 
 /**
  * Created by jespe on 01-03-2017.
@@ -123,5 +127,34 @@ public class Client implements Runnable {
 
     public void setHeartbeatTimer(Timer heartbeatTimer) {
         this.heartbeatTimer = heartbeatTimer;
+    }
+    
+    public String serializeXML() {
+        String xml = "";
+        xml += "<ArduinoCollection>";
+        xml += "<Arduinos>";
+                
+        XStream xstream = new XStream(new DomDriver());
+        xstream.processAnnotations(ArduinoMethod.class); 
+        //xstream.omitField(Arduino.class, "entry");
+        xstream.alias("Arduino", Arduino.class);
+        xstream.aliasField("core", Arduino.class, "coreMethods");
+        xstream.aliasField("group", Arduino.class, "groupMethods");
+        ArduinoServer.getInstance().getClients();
+        
+        for (Map.Entry<String, Client> entry : ArduinoServer.getInstance().getClients().entrySet() ) {
+            //System.out.println("We are inside for loop");
+            
+            Arduino xmlArduino = entry.getValue().getArduino();
+            xml += xstream.toXML(xmlArduino);
+  
+        }
+        
+        xml += "</Arduinos>";
+        xml += "</ArduinoCollection>";
+        
+        System.out.println(xml);
+        
+        return xml;
     }
 }

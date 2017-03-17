@@ -39,7 +39,7 @@ public class Communication implements ThreadState {
     public void communicating() {
         
         // Testing the xml convertion
-        serializeXML();
+        client.serializeXML();
         
         // til client fra UWP
         System.out.println("Trying to sent a test");
@@ -93,35 +93,6 @@ public class Communication implements ThreadState {
                 System.out.println("Could not instantiate DataOutputStream");
             }
         }
-    }
-
-    public String serializeXML() {
-        String xml = "";
-        xml += "<ArduinoCollection>";
-        xml += "<Arduinos>";
-                
-        XStream xstream = new XStream(new DomDriver());
-        xstream.processAnnotations(ArduinoMethod.class); 
-        //xstream.omitField(Arduino.class, "entry");
-        xstream.alias("Arduino", Arduino.class);
-        xstream.aliasField("core", Arduino.class, "coreMethods");
-        xstream.aliasField("group", Arduino.class, "groupMethods");
-        ArduinoServer.getInstance().getClients();
-        
-        for (Map.Entry<String, Client> entry : ArduinoServer.getInstance().getClients().entrySet() ) {
-            //System.out.println("We are inside for loop");
-            
-            Arduino arduino = entry.getValue().getArduino();
-            xml += xstream.toXML(arduino);
-  
-        }
-        
-        xml += "</Arduinos>";
-        xml += "</ArduinoCollection>";
-        
-        System.out.println(xml);
-        
-        return xml;
     }
     
     @Override

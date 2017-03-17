@@ -18,12 +18,12 @@ import states.Listener;
  * Created by jespe on 01-03-2017.
  */
 
-public class ArduinoServer {
+public class ArduinoServer implements Runnable{
     // Constants
     public static final int portNumber = 9000;
 
     // Instance
-    public static ArduinoServer instance;
+    public static ArduinoServer instance ;
 
     // State variables
     private ASState asState;
@@ -104,5 +104,10 @@ public class ArduinoServer {
 
     public void addClient(Client client) {
         this.clients.put(client.getArduino().getIp(), client);
+    }
+
+    @Override
+    public void run() {
+        this.initializeSocket();
     }
 }
