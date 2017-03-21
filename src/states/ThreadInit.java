@@ -78,9 +78,6 @@ public class ThreadInit implements ThreadState {
 
                         client.setThreadState(client.getComm());
                         client.communicating();
-                        if (message.isEmpty()) {
-                            break;
-                        }
                         
                 }
 
