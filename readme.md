@@ -2,9 +2,11 @@
 
 ## Linux user:
 Username: administrator
+
 Password: Keep1Safe
 
 ## Tomcat8 user:
 Username: admin
+
 Password: password
 
