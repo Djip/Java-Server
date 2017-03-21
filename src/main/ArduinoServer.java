@@ -1,7 +1,10 @@
 package main;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import interfaces.ASState;
 import models.Arduino;
+import models.ArduinoMethod;
 import states.Error;
 import states.Init;
 import states.Listener;
@@ -104,6 +107,35 @@ public class ArduinoServer implements Runnable{
 
     public void addClient(Client client) {
         this.clients.put(client.getArduino().getIp(), client);
+    }
+
+    public String serializeXML() {
+        String xml = "";
+        xml += "<ArduinoCollection>";
+        xml += "<Arduinos>";
+
+        XStream xstream = new XStream(new DomDriver());
+        xstream.processAnnotations(ArduinoMethod.class);
+        //xstream.omitField(Arduino.class, "entry");
+        xstream.alias("Arduino", Arduino.class);
+        xstream.aliasField("core", Arduino.class, "coreMethods");
+        xstream.aliasField("group", Arduino.class, "groupMethods");
+        ArduinoServer.getInstance().getClients();
+
+        for (Map.Entry<String, Client> entry : ArduinoServer.getInstance().getClients().entrySet() ) {
+            //System.out.println("We are inside for loop");
+
+            Arduino xmlArduino = entry.getValue().getArduino();
+            xml += xstream.toXML(xmlArduino);
+
+        }
+
+        xml += "</Arduinos>";
+        xml += "</ArduinoCollection>";
+
+        System.out.println(xml);
+
+        return xml;
     }
 
     @Override

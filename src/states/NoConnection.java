@@ -20,8 +20,13 @@ public class NoConnection implements ThreadState {
     }
 
     @Override
-    public void communicating() {
+    public void communicating(String methodName, int newValue) {
+        System.out.println("Can't communicate while no connection");
+    }
 
+    @Override
+    public void communicating(String methodName, int newValue, String unitName, int unitId) {
+        System.out.println("Can't communicate while no connection");
     }
 
     @Override

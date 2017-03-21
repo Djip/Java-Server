@@ -16,7 +16,6 @@ import java.util.Map;
 import jdk.nashorn.internal.runtime.Debug;
 import models.Arduino;
 import models.ArduinoMethod;
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
 
 /**
  * Created by jespe on 01-03-2017.
@@ -35,18 +34,12 @@ public class Communication implements ThreadState {
  // not in this state
     }
 
-    @Override
-    public void communicating() {
-        
-        // Testing the xml convertion
-        client.serializeXML();
-        
-        // til client fra UWP
-        System.out.println("Trying to sent a test");
+    public void communicating(String methodToCall) {
+
+
         try {
             dataOutputStream = new DataOutputStream(client.getSocket().getOutputStream());
-            dataOutputStream.writeUTF("Test");
-            System.out.println("Test sent");
+            dataOutputStream.writeUTF(methodToCall);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -57,10 +50,20 @@ public class Communication implements ThreadState {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-        // set State: NoConnection and method: cleanUp
-        client.setThreadState(client.getNoCon());
-        client.cleanUp();
+    @Override
+    public void communicating(String methodName, int newValue) {
+        String methodToCall = methodName + "," + newValue;
+
+        communicating(methodToCall);
+    }
+
+    @Override
+    public void communicating(String methodName, int newValue, String unitName, int unitId) {
+        String methodToCall = methodName + "," + newValue + "," + unitName + "," + unitId;
+
+        communicating(methodToCall);
     }
 
     @Override

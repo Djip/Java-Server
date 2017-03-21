@@ -74,8 +74,12 @@ public class Client implements Runnable {
         threadState.initializeClientObject();
     }
 
-    public void communicating() {
-        threadState.communicating();
+    public void communicating(String methodName, int newValue) {
+        threadState.communicating(methodName, newValue);
+    }
+
+    public void communicating(String methodName, int newValue, String unitName, int unitId) {
+        threadState.communicating(methodName, newValue, unitName, unitId);
     }
 
     public void cleanUp() {
@@ -127,34 +131,5 @@ public class Client implements Runnable {
 
     public void setHeartbeatTimer(Timer heartbeatTimer) {
         this.heartbeatTimer = heartbeatTimer;
-    }
-    
-    public String serializeXML() {
-        String xml = "";
-        xml += "<ArduinoCollection>";
-        xml += "<Arduinos>";
-                
-        XStream xstream = new XStream(new DomDriver());
-        xstream.processAnnotations(ArduinoMethod.class); 
-        //xstream.omitField(Arduino.class, "entry");
-        xstream.alias("Arduino", Arduino.class);
-        xstream.aliasField("core", Arduino.class, "coreMethods");
-        xstream.aliasField("group", Arduino.class, "groupMethods");
-        ArduinoServer.getInstance().getClients();
-        
-        for (Map.Entry<String, Client> entry : ArduinoServer.getInstance().getClients().entrySet() ) {
-            //System.out.println("We are inside for loop");
-            
-            Arduino xmlArduino = entry.getValue().getArduino();
-            xml += xstream.toXML(xmlArduino);
-  
-        }
-        
-        xml += "</Arduinos>";
-        xml += "</ArduinoCollection>";
-        
-        System.out.println(xml);
-        
-        return xml;
     }
 }

@@ -5,7 +5,8 @@ package interfaces;
  */
 public interface ThreadState {
     void initializeClientObject();
-    void communicating();
+    void communicating(String methodName, int newValue);
+    void communicating(String methodName, int newValue, String unitName, int unitId);
     void heartbeat();
     void cleanUp();
 }

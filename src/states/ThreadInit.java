@@ -75,7 +75,6 @@ public class ThreadInit implements ThreadState {
                         System.out.println("New client connected");
 
                         client.setThreadState(client.getComm());
-                        client.communicating();
                     }
                  }
 
@@ -96,14 +95,13 @@ public class ThreadInit implements ThreadState {
         }
     }
 
-    /**
-     *@author Martin
-     * @return none
-     * @params none
-     */
     @Override
-    public void communicating() {
-        //write only to client
+    public void communicating(String methodName, int newValue) {
+        System.out.println("Can't talk until init is complete");
+    }
+
+    @Override
+    public void communicating(String methodName, int newValue, String unitName, int unitId) {
         System.out.println("Can't talk until init is complete");
     }
 

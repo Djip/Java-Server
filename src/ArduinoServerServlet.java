@@ -26,14 +26,13 @@ public class ArduinoServerServlet extends HttpServlet {
     }
     
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-       
-       // Set response content type
-      response.setContentType("text/xml");
-      
-      Client a = new Client();
-      String xmlReturned = a.serializeXML();
-      out = response.getWriter();
-      out.println(xmlReturned);
-      out.close();
+        // Set response content type
+        response.setContentType("text/xml");
+
+        Client a = new Client();
+        String xmlReturned = ArduinoServer.getInstance().serializeXML();
+        out = response.getWriter();
+        out.println(xmlReturned);
+        out.close();
    }
 }
