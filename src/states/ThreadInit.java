@@ -7,6 +7,8 @@ import models.Arduino;
 import models.ArduinoMethod;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -49,35 +51,38 @@ public class ThreadInit implements ThreadState {
         //TODO method read code here?
         try
         {
-            System.out.println("Yo whats up!");
+            //InputStream inFromClient = client.getSocket().getInputStream();
+            //DataInputStream in = new DataInputStream(inFromClient);
+            // System.out.println("Yo whats up!");
             InputStreamReader ir = new InputStreamReader(client.getSocket().getInputStream());
             BufferedReader br = new BufferedReader(ir);
             String message = "";
 
-            try {
-                while (br.ready()) {
-                    message = br.readLine().trim();
-                    if (!message.isEmpty()) {
+                while ((message = br.readLine()) != null) {
+                   
                         System.out.println(message);
                         // Deserializing the string from Arduino
                         deSerialize(message);
-
+                        
                         // Creating timer that will do check on each client with Heartbeat method.
                         client.setHeartbeatTimer(new Timer());
                         client.getHeartbeatTimer().schedule(new TimerTask() {
                             @Override
                             public void run() {
-                                System.out.println("Running the Heartbeat method");
+                                //System.out.println("Running the Heartbeat method");
                                 client.getThreadState().heartbeat();
                             }
                         }, 2000, 2000);
-
+                        
                         System.out.println("New client connected");
 
                         client.setThreadState(client.getComm());
                         client.communicating();
-                    }
-                 }
+                        if (message.isEmpty()) {
+                            break;
+                        }
+                        
+                }
 
             } catch (SocketTimeoutException ee) {
 
@@ -88,12 +93,6 @@ public class ThreadInit implements ThreadState {
                 e.printStackTrace();
 
             }
-            br.close();
-        }
-        catch (Exception e)
-        {
-            System.out.println(e);
-        }
     }
 
     /**
@@ -109,7 +108,7 @@ public class ThreadInit implements ThreadState {
 
     public void deSerialize(String message)
     {
-        System.out.println("OK");
+        // System.out.println("OK");
         Arduino arduino = new Arduino();
 
         // Split message by "#"

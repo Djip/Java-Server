@@ -11,6 +11,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import jdk.nashorn.internal.runtime.Debug;
@@ -47,20 +48,30 @@ public class Communication implements ThreadState {
             dataOutputStream = new DataOutputStream(client.getSocket().getOutputStream());
             dataOutputStream.writeUTF("Test");
             System.out.println("Test sent");
+            
+            // Lets get back to listen
+            dataOutputStream.writeUTF("Writing to the client again to test that the socket is still open for buisness");
+            System.out.println("Test sent");
+            // Now we can write to the client as much as we want. AS LONG THAT WE DONT CLOSE dataoutput og socket...
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         // Close dataOutputStream
-        try {
+        /*try {
             dataOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }*/
+        
+        // We should not close this connection unless we dont have one to the client.
+        // Lets check if the socket has been closed, if it is, then lets cleanup.
+        if(client.getSocket().isClosed()) {
+            // set State: NoConnection and method: cleanUp
+            client.setThreadState(client.getNoCon());
+            client.cleanUp();
         }
-
-        // set State: NoConnection and method: cleanUp
-        client.setThreadState(client.getNoCon());
-        client.cleanUp();
     }
 
     @Override
@@ -89,8 +100,16 @@ public class Communication implements ThreadState {
                     client.cleanUp();
                 }
 
+            } catch (UnknownHostException e) {
+
+                //e.printStackTrace();
+                System.out.println("got unknowhost exeption");
+
             } catch (IOException e) {
-                System.out.println("Could not instantiate DataOutputStream");
+
+                System.out.println("got IOExeption");
+                //e.printStackTrace();
+
             }
         }
     }

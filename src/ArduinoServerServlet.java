@@ -17,14 +17,6 @@ public class ArduinoServerServlet extends HttpServlet {
     
     private PrintWriter out = null;
     
-    @Override
-    public void init() throws ServletException
-    {       
-        /*System.out.println("We have now started the server called init method! :D");
-        ArduinoServer arduinoServer = ArduinoServer.getInstance();
-        arduinoServer.initializeSocket();*/
-    }
-    
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
        
        // Set response content type
