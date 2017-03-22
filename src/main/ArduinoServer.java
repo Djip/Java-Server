@@ -133,7 +133,7 @@ public class ArduinoServer implements Runnable{
         xml += "</Arduinos>";
         xml += "</ArduinoCollection>";
 
-        System.out.println(xml);
+        //System.out.println(xml);
 
         return xml;
     }

@@ -35,19 +35,10 @@ public class Communication implements ThreadState {
     }
 
     public void communicating(String methodToCall) {
-
-
         try {
             dataOutputStream = new DataOutputStream(client.getSocket().getOutputStream());
-            dataOutputStream.writeUTF(methodToCall);
+            dataOutputStream.writeUTF(methodToCall + "*");
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Close dataOutputStream
-        try {
-            dataOutputStream.close();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -68,34 +59,33 @@ public class Communication implements ThreadState {
 
     @Override
     public void heartbeat() {
-        // Looping though our clients and testing if the connection to all of then is still okay.
-        // Else se simply remove the client from the HashMap
-        for(Map.Entry<String, Client> entry : ArduinoServer.getInstance().getClients().entrySet()) {
-            String key = entry.getKey();
-            Client value = entry.getValue();
+        //System.out.println("Heartbeating: " + client.getArduino().getName());
+        /*
+        try {
+            // Creating output stream so we can test connection.
+            DataOutputStream os = new DataOutputStream(client.getSocket().getOutputStream());
             try {
-                // Creating output stream so we can test connection.
-                DataOutputStream os = new DataOutputStream(value.getSocket().getOutputStream());
-                try {
-
-                    // Trying to write to the socket, if that failes. then we dont have connection anymore
-                    // and we will catch exeption and remove the client from our client HashMap.
-                    os.writeBoolean(true);
-                    System.out.println("Trying to write on the socket..");
-                } catch (SocketException sockEx) {
-                    // Remove the client from the Hashmap clients
-                    ArduinoServer.getInstance().getClients().remove(key);
-                    System.out.println("Client disconnected, and removed from client list");
-                    client.getHeartbeatTimer().cancel();
-                    client.getHeartbeatTimer().purge();
-                    client.setThreadState(client.getNoCon());
-                    client.cleanUp();
-                }
-
-            } catch (IOException e) {
-                System.out.println("Could not instantiate DataOutputStream");
+                // Trying to write to the socket, if that failes. then we dont have connection anymore
+                // and we will catch exeption and remove the client from our client HashMap.
+                os.writeBoolean(true);
+                //System.out.println("Trying to write on the socket..");
+            } catch (SocketException sockEx) {
+                // Remove the client from the Hashmap clients
+                ArduinoServer.getInstance().getClients().remove(client.getArduino().getIp());
+                System.out.println("Client disconnected, and removed from client list");
+                client.getHeartbeatTimer().cancel();
+                client.getHeartbeatTimer().purge();
+                client.setThreadState(client.getNoCon());
+                client.cleanUp();
             }
+
+        } catch (IOException e) {
+            System.out.println("No OutputStream");
+            ArduinoServer.getInstance().getClients().remove(client.getArduino().getIp());
+            client.getHeartbeatTimer().cancel();
+            client.getHeartbeatTimer().purge();
         }
+        */
     }
     
     @Override

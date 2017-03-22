@@ -43,9 +43,6 @@ public class ThreadInit implements ThreadState {
      * */
     @Override
     public void initializeClientObject() {
-
-
-
         //TODO method read code here?
         try
         {
@@ -67,7 +64,6 @@ public class ThreadInit implements ThreadState {
                         client.getHeartbeatTimer().schedule(new TimerTask() {
                             @Override
                             public void run() {
-                                System.out.println("Running the Heartbeat method");
                                 client.getThreadState().heartbeat();
                             }
                         }, 2000, 2000);
@@ -87,7 +83,7 @@ public class ThreadInit implements ThreadState {
                 e.printStackTrace();
 
             }
-            br.close();
+            //br.close();
         }
         catch (Exception e)
         {
@@ -132,7 +128,11 @@ public class ThreadInit implements ThreadState {
             //Split var by ","
             String [] var = methodString.split(",", -1);
 
-            int unitCount = Integer.parseInt(var[6]);
+            int unitCount = 0;
+            if (var[6] != null && !var[6].equals("")) {
+                unitCount = Integer.parseInt(var[6]);
+            }
+
             //checking currentState are null or empty
             if(unitCount > 0)
             {
@@ -152,7 +152,7 @@ public class ThreadInit implements ThreadState {
         arduino.setGroupMethods(groupMethods);
 
         //Get and Set the ip and converte the ip to a string
-        arduino.setIp(client.getSocket().getInetAddress().toString());
+        arduino.setIp(client.getSocket().getInetAddress().toString().replace("/", ""));
 
         // Creating new hashmap for connectet arduino client
         //Map<String, Arduino> arduoinoClient = new HashMap<>();

@@ -53,18 +53,26 @@ public class AppWebsocket extends HttpServlet {
         String[] methodToCall = message.split(",", -1);
 
         for (Map.Entry<String, Client> client : ArduinoServer.getInstance().getClients().entrySet()) {
+            System.out.println(client.getKey() + " - " + methodToCall[0]);
             if (client.getKey().equals(methodToCall[0])) {
+                System.out.println("Client found");
                 if (methodToCall[3] == null || methodToCall[3].equals("")) {
+                    System.out.println("Core method");
                     for (ArduinoMethod arduinoMethod : client.getValue().getArduino().getCoreMethods()) {
+                        System.out.println(methodToCall[1] + " - " + arduinoMethod.getName());
                         if (methodToCall[1].equals(arduinoMethod.getName())) {
+                            System.out.println("Method found");
                             int newValue = Integer.parseInt(methodToCall[2]);
                             arduinoMethod.setCurrentValue(newValue);
                             client.getValue().communicating(methodToCall[1], newValue);
                         }
                     }
                 } else {
+                    System.out.println("Group method");
                     for (ArduinoMethod arduinoMethod : client.getValue().getArduino().getGroupMethods()) {
+                        System.out.println(methodToCall[1] + " - " + arduinoMethod.getName());
                         if (methodToCall[1].equals(arduinoMethod.getName())) {
+                            System.out.println("Method found");
                             int newValue = Integer.parseInt(methodToCall[2]);
                             arduinoMethod.setCurrentValue(newValue);
                             client.getValue().communicating(methodToCall[1], newValue, methodToCall[3], Integer.parseInt(methodToCall[4]));
