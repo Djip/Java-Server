@@ -37,7 +37,7 @@ public class Communication implements ThreadState {
     public void communicating(String methodToCall) {
         try {
             dataOutputStream = new DataOutputStream(client.getSocket().getOutputStream());
-            dataOutputStream.writeUTF(methodToCall + "*");
+            dataOutputStream.writeUTF(methodToCall);
         } catch (Exception e) {
             e.printStackTrace();
         }
