@@ -7,6 +7,7 @@ import models.Arduino;
 import models.ArduinoMethod;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -71,6 +72,13 @@ public class ThreadInit implements ThreadState {
                         System.out.println("New client connected");
 
                         client.setThreadState(client.getComm());
+                        try {
+                            ir.reset();
+                        } catch(IOException e) {
+                            System.out.println("Reset of InputStreamReader gives us following exception");
+                            System.out.println(e);
+                        }
+                        
                     }
                  }
 
